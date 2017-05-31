@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver"></property>	
+		<property name="url" value="jdbc:mysql://localhost:3306/JavaAssignment"></property>
+		<property name="username" value="root"></property>
+		<property name="password" value="mahendra@2017"></property>
+	</bean>
+
+	<bean id="personService" class="com.hibernatesessionfactory.apps.PersonServiceImpl">
+		<property name="personDAO" ref="personDAO"></property>
+	</bean>
+
+	<bean id="personDAO" class="com.hibernatesessionfactory.apps.PersonDAOImpl">	
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="packagesToScan" value="com.hibernatesessionfactory.apps.Person">
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+				<prop key="hibernate.current_session_context_class">thread</prop>
+				<prop key="hibernate.show_sql">true</prop>
+			</props>
+		</property>
+	</bean>
+
+
+	<bean id="dbUtil" class="com.hibernatesessionfactory.apps.DbUtil" init-method="initialize">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	
+	
+</beans>
